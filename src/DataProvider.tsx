@@ -1,27 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import { createContext } from "./createContext";
+import { useLocalStorage } from "./useLocalStorage";
 
 export interface Task {
   title: string;
+  dueDate: string;
   isComplete: boolean;
   isDeleted: boolean;
 }
 
 interface Data {
   tasks: Task[];
-  addTask: (title: string) => void;
+  addTask: (title: string, dueDate: string) => void;
   updateTask: (index: number, task: Task) => void;
 }
 
 const [useData, DataContextProvider] = createContext<Data>();
 
 const useDataProvider = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useLocalStorage<Task[]>("tasks", []);
   return {
     tasks,
-    addTask: (title: string) =>
+    addTask: (title: string, dueDate: string) =>
       setTasks((tasks) => [
-        { title, isComplete: false, isDeleted: false },
+        { title, dueDate, isComplete: false, isDeleted: false },
         ...tasks,
       ]),
     updateTask: (index: number, task: Task) => {

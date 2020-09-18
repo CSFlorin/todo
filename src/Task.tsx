@@ -9,6 +9,7 @@ interface Props extends TaskInterface {
 
 export const Task: React.FC<Props> = ({
   title,
+  dueDate,
   isComplete,
   isDeleted,
   index,
@@ -39,26 +40,40 @@ export const Task: React.FC<Props> = ({
           onChange={(e) => {
             updateTask(index, {
               title,
+              dueDate,
               isDeleted,
               isComplete: e.target.checked,
             });
           }}
         />
-        {title}
+        <div
+          style={{ textDecoration: isComplete ? "line-through" : "initial" }}
+        >
+          {title}
+        </div>
       </div>
 
-      <IconButton
-        color="secondary"
-        onClick={() =>
-          updateTask(index, {
-            title,
-            isDeleted: true,
-            isComplete,
-          })
-        }
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
       >
-        <DeleteForeverIcon />
-      </IconButton>
+        <div>{new Date(dueDate).toDateString()}</div>
+        <IconButton
+          color="secondary"
+          onClick={() =>
+            updateTask(index, {
+              title,
+              dueDate,
+              isDeleted: true,
+              isComplete,
+            })
+          }
+        >
+          <DeleteForeverIcon />
+        </IconButton>
+      </div>
     </div>
   );
 };
