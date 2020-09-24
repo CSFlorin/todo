@@ -2,17 +2,20 @@ import React from "react";
 import { createContext } from "./createContext";
 import { useLocalStorage } from "./useLocalStorage";
 
+export type Category = "work" | "todo" | "code review";
+
 export interface Task {
   title: string;
   dueDate: string;
   isComplete: boolean;
   isDeleted: boolean;
+  category: Category;
 }
 
 interface Data {
   tasks: Task[];
-  addTask: (title: string, dueDate: string) => void;
-  updateTask: (index: number, task: Task) => void;
+  addTask: (title: string, dueDate: string, category: Category) => void;
+  updateTask: (index: number, task: Partial<Task>) => void;
 }
 
 const [useData, DataContextProvider] = createContext<Data>();
@@ -21,13 +24,15 @@ const useDataProvider = () => {
   const [tasks, setTasks] = useLocalStorage<Task[]>("tasks", []);
   return {
     tasks,
-    addTask: (title: string, dueDate: string) =>
+    addTask: (title: string, dueDate: string, category: Category) =>
       setTasks((tasks) => [
-        { title, dueDate, isComplete: false, isDeleted: false },
+        { title, dueDate, isComplete: false, isDeleted: false, category },
         ...tasks,
       ]),
-    updateTask: (index: number, task: Task) => {
-      setTasks((tasks) => tasks.map((t, i) => (i === index ? task : t)));
+    updateTask: (index: number, task: Partial<Task>) => {
+      setTasks((tasks) =>
+        tasks.map((t, i) => (i === index ? { ...t, ...task } : t))
+      );
     },
   };
 };

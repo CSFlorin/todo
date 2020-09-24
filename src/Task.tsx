@@ -1,4 +1,4 @@
-import { Checkbox, IconButton } from "@material-ui/core";
+import { Checkbox, Chip, IconButton } from "@material-ui/core";
 import React from "react";
 import { Task as TaskInterface, useData } from "./DataProvider";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
@@ -11,7 +11,7 @@ export const Task: React.FC<Props> = ({
   title,
   dueDate,
   isComplete,
-  isDeleted,
+  category,
   index,
 }) => {
   const { updateTask } = useData();
@@ -39,9 +39,6 @@ export const Task: React.FC<Props> = ({
           color="primary"
           onChange={(e) => {
             updateTask(index, {
-              title,
-              dueDate,
-              isDeleted,
               isComplete: e.target.checked,
             });
           }}
@@ -50,6 +47,9 @@ export const Task: React.FC<Props> = ({
           style={{ textDecoration: isComplete ? "line-through" : "initial" }}
         >
           {title}
+        </div>
+        <div style={{ marginLeft: "1rem" }}>
+          <Chip label={category} variant="outlined" />
         </div>
       </div>
 
@@ -64,10 +64,7 @@ export const Task: React.FC<Props> = ({
           color="secondary"
           onClick={() =>
             updateTask(index, {
-              title,
-              dueDate,
               isDeleted: true,
-              isComplete,
             })
           }
         >
