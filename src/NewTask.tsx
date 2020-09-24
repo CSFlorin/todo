@@ -1,4 +1,10 @@
-import { Button, MenuItem, Select } from "@material-ui/core";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@material-ui/core";
 import { TextField } from "@material-ui/core";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -66,18 +72,24 @@ export const NewTask: React.FC = () => {
             />
           </MuiPickersUtilsProvider>
 
-          <Select
-            labelId="category"
-            id="category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value as Category)}
-          >
-            {categories.map((category) => (
-              <MenuItem key={category} value={category}>
-                {category}
-              </MenuItem>
-            ))}
-          </Select>
+          <FormControl>
+            <InputLabel shrink required id="category-label">
+              Category
+            </InputLabel>
+            <Select
+              labelId="category"
+              id="category"
+              variant="filled"
+              value={category}
+              onChange={(e) => setCategory(e.target.value as Category)}
+            >
+              {categories.map((category) => (
+                <MenuItem key={category} value={category}>
+                  {category}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
 
         <Button
