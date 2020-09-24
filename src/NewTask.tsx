@@ -7,11 +7,11 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import React, { useState, useRef, useEffect } from "react";
-import { useData, Category } from "./DataProvider";
+import { useData, Category, categories } from "./DataProvider";
 
 export const NewTask: React.FC = () => {
   const [task, setTask] = useState("");
-  const [category, setCategory] = useState<Category>("todo");
+  const [category, setCategory] = useState<Category>(categories[0]);
   const [day, setDay] = useState<Date | null>(() => {
     const newDay = new Date();
     newDay.setDate(newDay.getDate() + 7);
@@ -72,9 +72,11 @@ export const NewTask: React.FC = () => {
             value={category}
             onChange={(e) => setCategory(e.target.value as Category)}
           >
-            <MenuItem value={"work"}>work</MenuItem>
-            <MenuItem value={"todo"}>todo</MenuItem>
-            <MenuItem value={"code review"}>code review</MenuItem>
+            {categories.map((category) => (
+              <MenuItem key={category} value={category}>
+                {category}
+              </MenuItem>
+            ))}
           </Select>
         </div>
 

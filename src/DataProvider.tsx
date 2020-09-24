@@ -2,7 +2,9 @@ import React from "react";
 import { createContext } from "./createContext";
 import { useLocalStorage } from "./useLocalStorage";
 
-export type Category = "work" | "todo" | "code review";
+export const categories = ["work", "todo", "code review"] as const;
+
+export type Category = typeof categories[number];
 
 export interface Task {
   title: string;
