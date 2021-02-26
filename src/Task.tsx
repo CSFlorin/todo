@@ -1,5 +1,5 @@
-import { Checkbox, Chip, IconButton } from "@material-ui/core";
-import React from "react";
+import { Checkbox, IconButton, TextField, Button } from "@material-ui/core";
+import React, { useState } from "react";
 import { Task as TaskInterface, useData } from "./DataProvider";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
@@ -11,10 +11,13 @@ export const Task: React.FC<Props> = ({
   title,
   dueDate,
   isComplete,
-  category,
   index,
 }) => {
   const { updateTask } = useData();
+  const [edit, setEdit] = useState(false);
+
+  const [localTitle, setLocalTitle] = useState(title);
+
   return (
     <div
       style={{
@@ -43,14 +46,38 @@ export const Task: React.FC<Props> = ({
             });
           }}
         />
-        <div
-          style={{ textDecoration: isComplete ? "line-through" : "initial" }}
-        >
-          {title}
-        </div>
-        <div style={{ marginLeft: "1rem" }}>
-          <Chip label={category} variant="outlined" />
-        </div>
+
+        {edit ? (
+          <>
+            <TextField
+              id="title"
+              label="Title"
+              variant="filled"
+              size="small"
+              value={localTitle}
+              onChange={(e) => setLocalTitle(e.target.value)}
+            />
+            <Button
+              onClick={() => {
+                updateTask(index, {
+                  title: localTitle,
+                });
+                setEdit(false);
+              }}
+            >
+              Save
+            </Button>
+          </>
+        ) : (
+          <div
+            style={{ textDecoration: isComplete ? "line-through" : "initial" }}
+            onClick={() => {
+              setEdit(true);
+            }}
+          >
+            {localTitle}
+          </div>
+        )}
       </div>
 
       <div

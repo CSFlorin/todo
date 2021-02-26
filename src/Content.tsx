@@ -1,5 +1,5 @@
 import React from "react";
-import { useData } from "./DataProvider";
+import { useData, categories } from "./DataProvider";
 import { NewTask } from "./NewTask";
 import { Task } from "./Task";
 
@@ -8,9 +8,20 @@ export const Content: React.FC = () => {
   return (
     <div style={{ margin: "1rem 3rem" }}>
       <NewTask />
-      {tasks.map((task, index) => {
-        if (task.isDeleted) return null;
-        return <Task key={index} {...task} index={index} />;
+
+      {categories.map((category) => {
+        const filteredTasks = tasks
+          .map((task, index) => ({ ...task, index }))
+          .filter(({ category: c }) => c === category);
+        return (
+          <div key={category}>
+            <h3>{category}</h3>
+            {filteredTasks.map((task) => {
+              if (task.isDeleted) return null;
+              return <Task key={task.id} {...task} />;
+            })}
+          </div>
+        );
       })}
     </div>
   );

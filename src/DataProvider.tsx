@@ -1,6 +1,7 @@
 import React from "react";
 import { createContext } from "./createContext";
 import { useLocalStorage } from "./useLocalStorage";
+import { v4 as uuidv4 } from "uuid";
 
 export const categories = ["work", "todo", "code review"] as const;
 
@@ -12,6 +13,7 @@ export interface Task {
   isComplete: boolean;
   isDeleted: boolean;
   category: Category;
+  id: string;
 }
 
 interface Data {
@@ -28,7 +30,14 @@ const useDataProvider = () => {
     tasks,
     addTask: (title: string, dueDate: string, category: Category) =>
       setTasks((tasks) => [
-        { title, dueDate, isComplete: false, isDeleted: false, category },
+        {
+          title,
+          dueDate,
+          isComplete: false,
+          isDeleted: false,
+          category,
+          id: uuidv4(),
+        },
         ...tasks,
       ]),
     updateTask: (index: number, task: Partial<Task>) => {
